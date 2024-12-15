@@ -22,14 +22,14 @@ export default function DashboardComponent() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:54321/functions/v1"
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:54321/functions/v1/api"
 
   useEffect(() => {
     const fetchInitialData = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_BASE_URL}/api/dashboard/exercisesInit`);
+        const response = await fetch(`${API_BASE_URL}/dashboard/exercisesInit`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -54,10 +54,11 @@ export default function DashboardComponent() {
             };
           } else if (data.todaysSessionOrPreset.type === 'preset') {
             initialSessionExercises = data.todaysSessionOrPreset.data;
+            console.log(data.todaysSessionOrPreset);
             initialSelectedGroup = {
-              id: data.todaysSessionOrPreset.data[0].presetGroupId,
+              id: data.todaysSessionOrPreset.data.id,
               name: data.exercisePresetGroups.find(
-                (group) => group.id === data.todaysSessionOrPreset.data[0].presetGroupId
+                (group) => group.id === data.todaysSessionOrPreset.data.id
               )?.name,
               date: new Date(),
             };
@@ -93,7 +94,7 @@ export default function DashboardComponent() {
 
         if (selectedSession) {
           const exerciseRes = await fetch(
-            `${API_BASE_URL}/api/training_exercises?training_session_id=${selectedSession.id}`);
+            `${API_BASE_URL}/training_exercises?training_session_id=${selectedSession.id}`);
           if (!exerciseRes.ok) {
             throw new Error('Network response was not ok');
           }
@@ -102,7 +103,7 @@ export default function DashboardComponent() {
           setUseTrainingExercises(true);
         } else {
           const presetsRes = await fetch(
-            `${API_BASE_URL}/api/exercise_presets?exercise_preset_group_id=${selectedGroup.id}`);
+            `${API_BASE_URL}/exercise_presets?exercise_preset_group_id=${selectedGroup.id}`);
           if (!presetsRes.ok) {
             throw new Error('Network response was not ok');
           }
@@ -127,9 +128,7 @@ export default function DashboardComponent() {
     if (exercises.length === 0 || sessionExercises.length === 0) return; 
 
     const gym = exercises
-      .filter((exercise) =>
-        sessionExercises.some((sessionExercise) => sessionExercise.exercise_id === exercise.id)
-      )
+      .filter((exercise) => exercise.exercise_type_id === 2)
       .map((exercise) => ({
         id: exercise.id,
         name: exercise.name,
@@ -146,7 +145,7 @@ export default function DashboardComponent() {
       }));
 
     const warmup = exercises
-      .filter((exercise) => exercise.exerciseTypeId === 4)
+      .filter((exercise) => exercise.exercise_type_id === 1)
       .map((exercise) => ({
         id: exercise.id,
         name: exercise.name,
@@ -157,7 +156,7 @@ export default function DashboardComponent() {
       }));
 
     const circuit = exercises
-      .filter((exercise) => exercise.exerciseTypeId === 5)
+      .filter((exercise) => exercise.exercise_type_id === 3)
       .map((exercise) => ({
         id: exercise.id,
         name: exercise.name,
@@ -236,7 +235,7 @@ export default function DashboardComponent() {
       );
 
       const method = useTrainingExercises ? 'PUT' : 'POST';
-      const url = `${API_BASE_URL}/api/training_exercises${useTrainingExercises ? `/${selectedGroup.id}` : ''}`;
+      const url = `${API_BASE_URL}/training_exercises${useTrainingExercises ? `/${selectedGroup.id}` : ''}`;
 
       console.log(url);
       console.log(exercisesToSave);

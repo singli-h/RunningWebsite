@@ -1,0 +1,212 @@
+{
+  "tables": {
+    "athlete_groups": {
+      "columns": [
+        {"id": "integer"},
+        {"coach_id": "integer"},
+        {"created_at": "timestamp with time zone"},
+        {"group_name": "character varying"}
+      ],
+      "relationships": {
+        "coach_id": {"references": "coaches.id"}
+      }
+    },
+    "athletes": {
+      "columns": [
+        {"id": "integer"},
+        {"user_id": "integer"},
+        {"height": "real"},
+        {"weight": "real"}
+      ],
+      "relationships": {
+        "user_id": {"references": "users.id"}
+      }
+    },
+    "body_parts": {
+      "columns": [
+        {"id": "integer"},
+        {"name": "character varying"}
+      ]
+    },
+    "coaches": {
+      "columns": [
+        {"id": "integer"},
+        {"user_id": "integer"},
+        {"speciality": "character varying"}
+      ],
+      "relationships": {
+        "user_id": {"references": "users.id"}
+      }
+    },
+    "exercise_preset_groups": {
+      "columns": [
+        {"id": "integer"},
+        {"week": "integer"},
+        {"day": "integer"},
+        {"date": "date"},
+        {"name": "character varying"}
+      ]
+    },
+    "exercise_presets": {
+      "columns": [
+        {"id": "integer"},
+        {"exercise_preset_group_id": "integer"},
+        {"exercise_id": "integer"},
+        {"sets": "integer"},
+        {"reps": "integer"},
+        {"output": "real"},
+        {"set_rest_time": "integer"},
+        {"rep_rest_time": "integer"},
+        {"power": "real"},
+        {"velocity": "real"},
+        {"order": "integer"}
+      ],
+      "relationships": {
+        "exercise_preset_group_id": {"references": "exercise_preset_groups.id"},
+        "exercise_id": {"references": "exercises.id"}
+      }
+    },
+    "exercise_tags": {
+      "columns": [
+        {"id": "integer"},
+        {"exercise_id": "integer"},
+        {"tag_id": "integer"}
+      ],
+      "relationships": {
+        "exercise_id": {"references": "exercises.id"},
+        "tag_id": {"references": "tags.id"}
+      }
+    },
+    "exercise_types": {
+      "columns": [
+        {"id": "integer"},
+        {"type": "character varying"}
+      ]
+    },
+    "exercises": {
+      "columns": [
+        {"id": "integer"},
+        {"exercise_type_id": "integer"},
+        {"unit_id": "integer"},
+        {"description": "text"},
+        {"video_url": "character varying"},
+        {"name": "character varying"}
+      ],
+      "relationships": {
+        "exercise_type_id": {"references": "exercise_types.id"},
+        "unit_id": {"references": "units.id"}
+      }
+    },
+    "sprint_group_preset_sprints": {
+      "columns": [
+        {"id": "integer"},
+        {"sprint_group_preset_id": "integer"},
+        {"sprint_preset_id": "integer"},
+        {"sets": "integer"},
+        {"reps": "integer"},
+        {"sequence_number": "integer"}
+      ],
+      "relationships": {
+        "sprint_group_preset_id": {"references": "sprint_group_presets.id"},
+        "sprint_preset_id": {"references": "sprint_presets.id"}
+      }
+    },
+    "sprint_group_presets": {
+      "columns": [
+        {"id": "integer"},
+        {"name": "character varying"}
+      ]
+    },
+    "sprint_presets": {
+      "columns": [
+        {"id": "integer"},
+        {"distance_meters": "real"},
+        {"effort_percentage": "integer"},
+        {"rep_rest_time_seconds": "integer"},
+        {"set_rest_time_seconds": "integer"},
+        {"name": "character varying"}
+      ]
+    },
+    "sprints": {
+      "columns": [
+        {"id": "integer"},
+        {"training_exercise_id": "integer"},
+        {"run_number": "integer"},
+        {"time_seconds": "real"}
+      ],
+      "relationships": {
+        "training_exercise_id": {"references": "training_exercises.id"}
+      }
+    },
+    "tags": {
+      "columns": [
+        {"id": "integer"},
+        {"name": "character varying"}
+      ]
+    },
+    "training_exercises": {
+      "columns": [
+        {"id": "integer"},
+        {"training_session_id": "integer"},
+        {"exercise_id": "integer"},
+        {"sets": "integer"},
+        {"reps": "integer"},
+        {"output": "real"},
+        {"set_rest_time": "integer"},
+        {"rep_rest_time": "integer"},
+        {"power": "real"},
+        {"velocity": "real"},
+        {"completed": "boolean"},
+        {"order": "integer"},
+        {"set_number": "integer"}
+      ],
+      "relationships": {
+        "training_session_id": {"references": "training_sessions.id"},
+        "exercise_id": {"references": "exercises.id"}
+      }
+    },
+    "training_session_sprint_groups": {
+      "columns": [
+        {"id": "integer"},
+        {"training_session_id": "integer"},
+        {"sprint_group_preset_id": "integer"}
+      ],
+      "relationships": {
+        "training_session_id": {"references": "training_sessions.id"},
+        "sprint_group_preset_id": {"references": "sprint_group_presets.id"}
+      }
+    },
+    "training_sessions": {
+      "columns": [
+        {"id": "integer"},
+        {"athlete_id": "integer"},
+        {"date_time": "timestamp with time zone"},
+        {"exercise_preset_group_id": "integer"},
+        {"updated_at": "timestamp with time zone"},
+        {"notes": "text"}
+      ],
+      "relationships": {
+        "athlete_id": {"references": "athletes.id"},
+        "exercise_preset_group_id": {"references": "exercise_preset_groups.id"}
+      }
+    },
+    "units": {
+      "columns": [
+        {"id": "integer"},
+        {"name": "character varying"}
+      ]
+    },
+    "users": {
+      "columns": [
+        {"id": "integer"},
+        {"birthdate": "date"},
+        {"email": "character varying"},
+        {"name": "character varying"},
+        {"sex": "character varying"},
+        {"subscription_status": "character varying"},
+        {"username": "character varying"},
+        {"password_hash": "character varying"}
+      ]
+    }
+  }
+}

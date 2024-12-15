@@ -2,7 +2,7 @@
 
 import React from "react"
 import Header from "@/src/components/common/Header"
-import FormComponent from "@/src/pages/form/FormComponent"
+import FormComponent from "@/src/pages/entry/PresetEntryComponenet"
 
 const Page = () => {
   const sectionMessage = {

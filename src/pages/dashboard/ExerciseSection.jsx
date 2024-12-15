@@ -24,6 +24,9 @@ export default function ExerciseSection({ exercises, onExerciseChange }) {
 
   return (
     <div className="w-full overflow-x-auto">
+      {exercises.length === 0 ? (
+        <div className="text-center text-gray-500">No exercises available</div>
+      ) : (
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-muted">
@@ -73,6 +76,7 @@ export default function ExerciseSection({ exercises, onExerciseChange }) {
           ))}
         </tbody>
       </table>
+      )}
     </div>
   );
 }
